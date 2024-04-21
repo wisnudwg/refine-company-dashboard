@@ -20,6 +20,7 @@ import routerBindings, {
 import { App as AntdApp } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { ForgotPassword, Home, Login, Register } from "./pages";
+import Layout from "./components/layout";
 
 function App() {
   return (
@@ -43,13 +44,24 @@ function App() {
               }}
             >
               <Routes>
-                <Route index element={<WelcomePage />} />
-                <Route index element={<Home />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route
+                  element={
+                    <Authenticated
+                      key="authenticated-layout"
+                      fallback={<CatchAllNavigate to="/login" />}
+                    >
+                      <Layout>
+                        <Outlet />
+                      </Layout>
+                    </Authenticated>
+                  }
+                >
+                  <Route index element={<Home />} />
+                </Route>
               </Routes>
-
               <RefineKbar />
               <UnsavedChangesNotifier />
               <DocumentTitleHandler />
